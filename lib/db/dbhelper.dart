@@ -24,32 +24,15 @@ class DataBaseApp {
       print("TODORO: creation de la base de donnée");
     }, onUpgrade: (Database db, int oldV, int newV) async {
       print('Version en cour:$oldV');
-      print('Nouvelle version:$oldV');
-
-      /// Migration normal: la version de l'application trouver sur le device à un numéro (n-1) de l'application qui veut être installer
-      if (oldV + 1 == newV) {
+      print('Nouvelle version:$newV');
+      if (oldV < newV && oldV + 1 == newV) {
+        /// Migration normal: la version de l'application trouver sur le device à un numéro (n-1) de l'application qui veut être installer
         print('Migration normal');
         await HistoryDB().contructorDataBaseV3(db);
-      }
-
-      /// Migration progressive: la version de l'application trouver sur le device à un numéro (n-n') de l'application qui veut être installer
-      /// n' étant une version très antérieur à la vertion actuelle
-      if (oldV + 1 < newV) {
-        print('Migration progressive');
-        bool migrationStart = true;
-        Future.delayed(Duration(seconds: 1), () {
-          migrationStart = false;
-        });
-        int versionDBClient = oldV++;
-        while (versionDBClient < 3) {
-          versionDBClient = await HistoryDB()
-              .constructorMigrationProgressive(versionDBClient, db);
-          print('Migration progressive: $versionDBClient');
-          if (migrationStart == false) {
-            print('Temps de migration expiré ($versionDBClient)');
-            break;
-          }
-        }
+      } else {
+        /// Migration progressive: la version de l'application trouver sur le device à un numéro (n-n') de l'application qui veut être installer
+        print('Migration progressive:${oldV + 1}');
+        await HistoryDB().constructorMigrationProgressive(oldV + 1, db);
       }
     });
     return _db;

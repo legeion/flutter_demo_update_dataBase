@@ -48,7 +48,7 @@ class _HomeState extends State<Home> {
                     child: ListTile(
                       title: Text(
                           '${course.name} - ${course.hours} hours - ${course.level}'),
-                      subtitle: Text(course.content.substring(0, 13)),
+                      subtitle: Text(course.content),
                       trailing: Column(
                         children: <Widget>[
                           Expanded(
