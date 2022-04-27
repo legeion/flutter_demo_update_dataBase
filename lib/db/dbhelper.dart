@@ -8,7 +8,10 @@ import 'package:flutter_demo_update_db/db/SchoolDbHistory.dart';
 /// de mettre à disposition une instance de la classe Database.
 ///
 /// Cette classe expose par ailleurs des methodes de lecture/écriture
-/// dans la BDD
+/// dans la BDD.
+///
+/// L'implémentation de cette classe est inspirée de billet :
+/// [Migrating a mobile database in flutter (SQLite)](https://medium.com/flutter-community/migrating-a-mobile-database-in-flutter-sqlite-44ac618e4897)
 class DataBaseApp {
   static Database _db;
   static final DataBaseApp _instance = DataBaseApp.internal();
