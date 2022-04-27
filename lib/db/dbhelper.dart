@@ -15,9 +15,41 @@ class DataBaseApp {
     if (_db != null) {
       return _db;
     }
+
+    /// Initialisation des scripts pour la création et la mise à jour des tables
+    List<String> migrationScripts = HistoryDB().contructorDataBaseUpdate();
+    List<String> initScript = HistoryDB().contructorDataBaseInit();
+
+    /// Lancement des procés de mise en place de la base de donnée
+    String path = join(await getDatabasesPath(), 'school.db');
+    _db = await openDatabase(path, version: migrationScripts.length,
+        onCreate: (Database db, int version) async {
+      initScript.forEach((script) async => await db.execute(script));
+      /* if () {
+        for (var i = oldVersion - 1; i <= migrationScripts.length - 1; i++) {
+        await db.execute(migrationScripts[i]);
+      }
+      } */
+      print("TODO RODO: base de donnée créer");
+    }, onUpgrade: (Database db, int oldVersion, int newVersion) async {
+      //await deleteDatabase(path);
+      print("TODO RODO: new version: $newVersion");
+      print("TODO RODO: ancien version: $oldVersion");
+      for (var i = oldVersion - 1; i <= newVersion - 1; i++) {
+        await db.execute(migrationScripts[i]);
+      }
+      print("TODO RODO: base de donnée mise à jour");
+    });
+    return _db;
+  }
+
+  /*  Future<Database> createDatabase() async {
+    if (_db != null) {
+      return _db;
+    }
     //define the path to the database
     String path = join(await getDatabasesPath(), 'school.db');
-    _db = await openDatabase(path, version: 1,
+    _db = await openDatabase(path, version: 2,
         onCreate: (Database db, int v) async {
       //create tables
       await HistoryDB().contructorDataBaseV1(db);
@@ -36,7 +68,7 @@ class DataBaseApp {
       }
     });
     return _db;
-  }
+  } */
 
   Future<int> createCourse(Course course) async {
     Database db = await createDatabase();
@@ -46,7 +78,7 @@ class DataBaseApp {
 
   Future<List> allCourses() async {
     Database db = await createDatabase();
-    //db.rawQuery('select * from courses');
+    db.rawQuery('select * from courses');
     return db.query('courses');
   }
 
