@@ -24,7 +24,9 @@ class DataBaseApp {
     String path = join(await getDatabasesPath(), 'school.db');
     _db = await openDatabase(path, version: migrationScripts.length,
         onCreate: (Database db, int version) async {
-      initScript.forEach((script) async => await db.execute(script));
+      //initScript.forEach((script) async => await db.execute(script));
+      HistoryDB.initScripts1
+          .forEach((script) async => await db.execute(script));
       /* if () {
         for (var i = oldVersion - 1; i <= migrationScripts.length - 1; i++) {
         await db.execute(migrationScripts[i]);

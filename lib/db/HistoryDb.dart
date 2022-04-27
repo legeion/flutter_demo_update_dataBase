@@ -31,6 +31,26 @@ class HistoryDB {
    * Les constructeurs de la base de donnée en fonction de l'évolution de l'application
    */
 
+  /// YZE
+  static const initScripts1 = [
+    // Table 1
+    '''
+          create table courses(
+            id integer primary key autoincrement,
+            name varchar(50), 
+            content varchar(255),
+            hours integer
+            )
+      ''',
+    // Table 1
+    '''
+          create table student(
+            id integer primary key autoincrement,
+            name varchar(50)
+            )
+      '''
+  ];
+
   ///version db: exploité lors de la tout premiere création de l'application
   List<String> contructorDataBaseInit() {
     const initScript = [
