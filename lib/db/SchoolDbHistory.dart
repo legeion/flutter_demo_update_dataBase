@@ -7,7 +7,7 @@
 ///
 /// La notion de versionning des modification est portée par la
 /// constante de classe `migrationScripts`.
-class HistoryDB {
+class SchoolDbHistory {
   static final String dbName = "school.db";
 
   static const initScripts = [

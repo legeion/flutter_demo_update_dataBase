@@ -1,8 +1,8 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../model/course.dart';
-import 'HistoryDb.dart';
+import 'package:flutter_demo_update_db/model/course.dart';
+import 'package:flutter_demo_update_db/db/SchoolDbHistory.dart';
 
 /// Classe singletone permettant d'ouvrir la connexion à la BDD et
 /// de mettre à disposition une instance de la classe Database.
@@ -23,19 +23,21 @@ class DataBaseApp {
     }
 
     // Definition du path (chemin) de la BDD
-    String path = join(await getDatabasesPath(), HistoryDB.dbName);
+    String path = join(await getDatabasesPath(), SchoolDbHistory.dbName);
 
     // Création (Ouverture) de l'instance BDD
-    _db = await openDatabase(path, version: HistoryDB.migrationScripts.length,
+    _db = await openDatabase(path,
+        version: SchoolDbHistory.migrationScripts.length,
         onCreate: (Database db, int version) async {
-      HistoryDB.initScripts.forEach((script) async => await db.execute(script));
+      SchoolDbHistory.initScripts
+          .forEach((script) async => await db.execute(script));
       print(
-          "[DEBUG-TEST]: Creation/Initialisation de la BDD <${HistoryDB.dbName}> !");
+          "[DEBUG-TEST]: Creation/Initialisation de la BDD <${SchoolDbHistory.dbName}> !");
     }, onUpgrade: (Database db, int oldVersion, int newVersion) async {
       print(
           "[DEBUG-TEST]: Mise à jour de la BDD de la v$oldVersion vers la v$newVersion !");
       for (var i = oldVersion - 1; i <= newVersion - 1; i++) {
-        await db.execute(HistoryDB.migrationScripts[i]);
+        await db.execute(SchoolDbHistory.migrationScripts[i]);
       }
     });
     return _db;
