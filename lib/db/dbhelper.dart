@@ -32,10 +32,22 @@ class DataBaseApp {
     _db = await openDatabase(path,
         version: SchoolDbHistory.migrationScripts.length,
         onCreate: (Database db, int version) async {
-      SchoolDbHistory.initScripts
-          .forEach((script) async => await db.execute(script));
-      print(
-          "[DEBUG-TEST]: Creation/Initialisation de la BDD <${SchoolDbHistory.dbName}> !");
+      if (SchoolDbHistory.migrationScripts.length == 1) {
+        SchoolDbHistory.initScripts
+            .forEach((script) async => await db.execute(script));
+        print(
+            "[DEBUG-TEST]: Creation/Initialisation de la BDD <${SchoolDbHistory.dbName}> !");
+      } else {
+        SchoolDbHistory.initScripts
+            .forEach((script) async => await db.execute(script));
+        print(
+            "[DEBUG-TEST]: Creation/Initialisation de la BDD <${SchoolDbHistory.dbName}> !");
+        for (var i = 0; i <= SchoolDbHistory.migrationScripts.length - 1; i++) {
+          await db.execute(SchoolDbHistory.migrationScripts[i]);
+        }
+        print(
+            "[DEBUG-TEST]: Creation/Migration de la BDD <${SchoolDbHistory.dbName}> !");
+      }
     }, onUpgrade: (Database db, int oldVersion, int newVersion) async {
       print(
           "[DEBUG-TEST]: Mise à jour de la BDD de la v$oldVersion vers la v$newVersion !");
